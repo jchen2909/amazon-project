@@ -3,20 +3,10 @@ import {products, getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+import { renderPaymentSummary } from './paymentSummary.js';
 // Imports a function from an external library using a string URL (esm only)
 // dayjs is a default export. Others are called named exports
 import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js'
-hello();
-
-//Using the dayjs external library
-
-const today = dayjs(); //Gets an object that contains today's date
-const deliveryDate = today.add(7, 'days');  
-//Format the day into a string that is readable. Look up dayjs library
-//for more information about formating the date
-
-console.log(deliveryDate.format('dddd, MMMM D'));
-
 
 // Generate the HTML for the cart summary
 
@@ -126,6 +116,7 @@ export function renderOrderSummary(){
 
       container.remove();
       updateCartQuantity();
+      renderPaymentSummary();
     })
   });
 
@@ -183,6 +174,7 @@ export function renderOrderSummary(){
       // Update the delivery option in the cart
       updateDeliveryOption(productId, deliveryOptionId);
       renderOrderSummary();
+      renderPaymentSummary();
     })
   })
 }
