@@ -7,11 +7,12 @@ import { renderPaymentSummary } from './paymentSummary.js';
 // Imports a function from an external library using a string URL (esm only)
 // dayjs is a default export. Others are called named exports
 import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js'
+import { renderCheckoutHeader } from './checkoutHeader.js';
 
 // Generate the HTML for the cart summary
 
 export function renderOrderSummary(){
-  updateCartQuantity();
+  //updateCartQuantity();
   let cartSummaryHTML = '';
   cart.forEach((cartItem)=>{
     const productId = cartItem.productId;
@@ -111,9 +112,10 @@ export function renderOrderSummary(){
     link.addEventListener('click',()=>{
       const productId = link.dataset.productId;
       removeFromCart(productId);
-      updateCartQuantity();
+      //updateCartQuantity();
       renderOrderSummary();
       renderPaymentSummary();
+      renderCheckoutHeader();
     })
   });
 
@@ -125,11 +127,11 @@ export function renderOrderSummary(){
     })
   })
 
-  function updateCartQuantity(){
+  /*function updateCartQuantity(){
     let cartQuantity = calculateCartQuantity();
 
     document.querySelector('.js-item-quantity-checkout').innerHTML = `${cartQuantity} items`;
-  }
+  }*/
 
   // Add class 'is-editing-quantity' to the cart-item-container when you click 'update'
   document.querySelectorAll('.js-update-quantity-link').forEach((link)=>{
