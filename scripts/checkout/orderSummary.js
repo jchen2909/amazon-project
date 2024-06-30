@@ -6,7 +6,7 @@ import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { renderPaymentSummary } from './paymentSummary.js';
 // Imports a function from an external library using a string URL (esm only)
 // dayjs is a default export. Others are called named exports
-import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js'
+import {deliveryOptions, getDeliveryOption, calculateDeliveryDate} from '../../data/deliveryOptions.js'
 import { renderCheckoutHeader } from './checkoutHeader.js';
 
 // Generate the HTML for the cart summary
@@ -23,9 +23,7 @@ export function renderOrderSummary(){
 
     const deliveryOption = getDeliveryOption(deliveryOptionId);
 
-    const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-    const dateString = deliveryDate.format('dddd, MMMM D');
+    const dateString = calculateDeliveryDate(deliveryOption);
 
     cartSummaryHTML += `
     <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
@@ -74,9 +72,8 @@ export function renderOrderSummary(){
   function deliveryOptionsHTML(matchingProduct, cartItem){
     let html = '';
     deliveryOptions.forEach((deliveryOption)=>{
-      const today = dayjs();
-      const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-      const dateString = deliveryDate.format('dddd, MMMM D');
+      
+      const dateString = calculateDeliveryDate(deliveryOption);
 
       const priceString = deliveryOption.priceCents === 0 ? 'FREE' : `$${formatCurrency(deliveryOption.priceCents)} -`;
 
@@ -118,14 +115,7 @@ export function renderOrderSummary(){
       renderCheckoutHeader();
     })
   });
-
-  // Make the update link interactive
-  document.querySelectorAll('.js-update-quantity-link').forEach((link)=>{
-    link.addEventListener('click', ()=>{
-      const productId = link.dataset.productId;
-      console.log(productId);
-    })
-  })
+  
 
   /*function updateCartQuantity(){
     let cartQuantity = calculateCartQuantity();
@@ -153,16 +143,11 @@ export function renderOrderSummary(){
       }
       if(newQuantity === 0){
         removeFromCart(productId);
-        const container = document.querySelector(`.js-cart-item-container-${productId}`);
-        container.remove();
-        updateCartQuantity();
       }
       updateQuantity(productId, newQuantity);
-      const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);
-      quantityLabel.innerHTML = newQuantity;
-      updateCartQuantity();
-      document.querySelector(`.js-cart-item-container-${productId}`).
-      classList.remove('is-editing-quantity');
+      renderOrderSummary();
+      renderPaymentSummary();
+      renderCheckoutHeader();
     })
   });
 
