@@ -754,6 +754,31 @@ export const products = [
 */
 
 export let products = [];
+
+export function loadProductsFetch(){
+  const promise = fetch(
+    'http://supersimplebackend.dev/products') //fetch takes in the url and returns a promise. You can call then.
+  .then((response)=>{ //fetch also saves the response in a variable
+    return response.json()  //response.json() is asychonous, it returns a promise.
+  }).then((productsData)=>{ //when response.json() finishes, it saves the data in the next parameter
+    products = productsData.map((productDetails)=>{
+      if(productDetails.type === 'clothing'){
+        return new Clothing(productDetails);
+      }
+      return new Product(productDetails);
+    });
+
+    console.log('Load Products');
+  });
+
+  return promise; // Return it as a promise in case you want to do something afterwards using 'then'
+}
+/*
+loadProductsFetch().then(()=>{
+  console.log('next step');
+});
+*/
+
 export function loadProducts(fun){
   const xhr = new XMLHttpRequest();
   xhr.addEventListener('load', ()=>{

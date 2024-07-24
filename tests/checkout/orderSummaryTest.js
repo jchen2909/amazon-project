@@ -1,6 +1,6 @@
 import {renderOrderSummary} from '../../scripts/checkout/orderSummary.js';
 import {loadFromStorage, cart, removeFromCart} from '../../data/cart.js';
-import {loadProducts} from '../../data/products.js';
+import {loadProducts, loadProductsFetch} from '../../data/products.js';
 
 
 describe('Test Suide: renderOrderSummary', ()=>{
@@ -8,7 +8,7 @@ describe('Test Suide: renderOrderSummary', ()=>{
   const productId2 = '15b6fc6f-327a-4ec4-896f-486349e85a3d';
   //By giving the parameter 'done' the function will move on once you call the done() function. This allows us to wait for certain responses to return before moving on. (Asychronous Functions)
   beforeAll((done)=>{
-    loadProducts(()=>{
+    loadProductsFetch().then(()=>{
       done();
     });
   });
