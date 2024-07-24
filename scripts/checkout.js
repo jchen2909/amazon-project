@@ -9,7 +9,23 @@ import {loadCart} from '../data/cart.js';
 
 //Practicing Promises (a class) Instantiation requires a function
 // then() takes a function that will be run next
+async function loadPage(){ //async functions return a promise. async allows us to use await(wait for a function)
 
+  await loadProductsFetch();
+  await new Promise((resolve)=>{
+    loadCart(()=>{
+      resolve();
+    });
+  });
+  renderOrderSummary();
+  renderPaymentSummary();
+  renderCheckoutHeader();
+
+}
+
+loadPage();
+
+/*
 Promise.all([
   loadProductsFetch(),
   new Promise((resolve)=>{
@@ -22,6 +38,7 @@ Promise.all([
   renderPaymentSummary();
   renderCheckoutHeader();
 });
+*/
 
 /*
 new Promise((resolve)=>{
