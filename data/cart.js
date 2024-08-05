@@ -104,3 +104,8 @@ export function loadCart(fun){
   xhr.open('GET', 'http://supersimplebackend.dev/cart')
   xhr.send();
 }
+
+export function resetCart(){
+  cart =[];
+  saveToStorage();
+}
